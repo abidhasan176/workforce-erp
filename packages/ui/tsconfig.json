@@ -1,0 +1,10 @@
+{
+  "extends": "../config/typescript-config/react-library.json",
+  "compilerOptions": {
+    "paths": {
+      "@workforce-erp/ui/*": ["./src/*"]
+    }
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "dist"]
+}
