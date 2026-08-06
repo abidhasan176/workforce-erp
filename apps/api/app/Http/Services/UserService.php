@@ -9,7 +9,7 @@ class UserService
     public function getUsers()
     {
         $users = User::with('posts')->get();
+
         return response()->json($users);
     }
 }
-

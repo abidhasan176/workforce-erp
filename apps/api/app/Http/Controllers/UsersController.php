@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class UsersController extends Controller
 {
@@ -20,7 +19,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-       return $this->userService->getUsers();
+        return $this->userService->getUsers();
     }
 
     /**
@@ -31,11 +30,11 @@ class UsersController extends Controller
         return response()->json([
             'data' => [
                 'id' => $id,
-                'name' => 'Item ' . $id,
-                'description' => 'Description for item ' . $id,
+                'name' => 'Item '.$id,
+                'description' => 'Description for item '.$id,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
         ]);
     }
 
@@ -57,7 +56,7 @@ class UsersController extends Controller
                 'name' => $body->get('name'),
                 'description' => $request->input('description', 'Item description'),
                 'created_at' => now(),
-            ]
+            ],
         ], 201);
     }
 
@@ -73,7 +72,7 @@ class UsersController extends Controller
                 'name' => $request->input('name', 'Updated Item'),
                 'description' => $request->input('description', 'Updated description'),
                 'updated_at' => now(),
-            ]
+            ],
         ]);
     }
 
@@ -89,7 +88,7 @@ class UsersController extends Controller
                 'name' => $request->input('name', 'Partially Updated Item'),
                 'description' => $request->input('description', 'Partially updated description'),
                 'updated_at' => now(),
-            ]
+            ],
         ]);
     }
 
@@ -102,8 +101,7 @@ class UsersController extends Controller
             'message' => 'Item deleted successfully',
             'data' => [
                 'id' => $id,
-            ]
+            ],
         ]);
     }
 }
-

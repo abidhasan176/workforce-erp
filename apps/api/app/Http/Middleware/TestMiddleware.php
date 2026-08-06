@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TestMiddleware
 {
-
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->header('X-API-TOKEN');
@@ -23,5 +22,3 @@ class TestMiddleware
         return $next($request);
     }
 }
-
-
