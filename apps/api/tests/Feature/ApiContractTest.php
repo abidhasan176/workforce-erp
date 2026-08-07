@@ -38,7 +38,7 @@ class ApiContractTest extends TestCase
     {
         // Test Paginated List
         $response = $this->withHeader('X-API-TOKEN', 'my-secret-token')
-            ->getJson('/api/v1/items?page=1&per_page=5');
+            ->getJson('/api/v1/test-contract/paginate?page=1&per_page=5');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -62,7 +62,7 @@ class ApiContractTest extends TestCase
 
         // Test Single Resource
         $singleResponse = $this->withHeader('X-API-TOKEN', 'my-secret-token')
-            ->getJson('/api/v1/items/2');
+            ->getJson('/api/v1/test-contract/success');
         $singleResponse->assertStatus(200)
             ->assertJsonStructure([
                 'success',
@@ -84,9 +84,9 @@ class ApiContractTest extends TestCase
      */
     public function test_validation_error_contract(): void
     {
-        // POST to /items without required 'name' field
+        // POST to /validate without required 'name' field
         $response = $this->withHeader('X-API-TOKEN', 'my-secret-token')
-            ->postJson('/api/v1/items', [
+            ->postJson('/api/v1/test-contract/validate', [
                 'description' => 'Missing name field',
             ]);
 
@@ -108,7 +108,7 @@ class ApiContractTest extends TestCase
     {
         // 404 for model/resource not found
         $response = $this->withHeader('X-API-TOKEN', 'my-secret-token')
-            ->getJson('/api/v1/items/999');
+            ->getJson('/api/v1/test-contract/not-found');
 
         $response->assertStatus(404)
             ->assertJson([
