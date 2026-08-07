@@ -130,4 +130,3 @@ class UsersController extends Controller
         ], 'Item deleted successfully');
     }
 }
-

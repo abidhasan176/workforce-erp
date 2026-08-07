@@ -11,7 +11,7 @@ trait ApiResponseTrait
     /**
      * Send a successful JSON response.
      */
-    protected function successResponse(mixed $data = null, string $message = null, int $statusCode = 200): JsonResponse
+    protected function successResponse(mixed $data = null, ?string $message = null, int $statusCode = 200): JsonResponse
     {
         $response = [
             'success' => true,
@@ -68,7 +68,7 @@ trait ApiResponseTrait
             'message' => $message,
         ];
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             $response['errors'] = $errors;
         }
 

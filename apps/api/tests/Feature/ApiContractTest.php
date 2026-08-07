@@ -45,10 +45,10 @@ class ApiContractTest extends TestCase
                 'success',
                 'message',
                 'data' => [
-                    '*' => ['id', 'name', 'description', 'created_at', 'updated_at']
+                    '*' => ['id', 'name', 'description', 'created_at', 'updated_at'],
                 ],
                 'meta' => ['current_page', 'from', 'last_page', 'path', 'per_page', 'to', 'total'],
-                'links' => ['first', 'last', 'prev', 'next']
+                'links' => ['first', 'last', 'prev', 'next'],
             ])
             ->assertJson([
                 'success' => true,
@@ -57,7 +57,7 @@ class ApiContractTest extends TestCase
                     'current_page' => 1,
                     'per_page' => 5,
                     'total' => 12,
-                ]
+                ],
             ]);
 
         // Test Single Resource
@@ -67,15 +67,15 @@ class ApiContractTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'message',
-                'data' => ['id', 'name', 'description', 'created_at', 'updated_at']
+                'data' => ['id', 'name', 'description', 'created_at', 'updated_at'],
             ])
             ->assertJson([
                 'success' => true,
                 'message' => 'Item retrieved successfully',
                 'data' => [
                     'id' => 2,
-                    'name' => 'Item 2'
-                ]
+                    'name' => 'Item 2',
+                ],
             ]);
     }
 
@@ -87,14 +87,14 @@ class ApiContractTest extends TestCase
         // POST to /items without required 'name' field
         $response = $this->withHeader('X-API-TOKEN', 'my-secret-token')
             ->postJson('/api/v1/items', [
-                'description' => 'Missing name field'
+                'description' => 'Missing name field',
             ]);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'success',
                 'message',
-                'errors' => ['name']
+                'errors' => ['name'],
             ])
             ->assertJson([
                 'success' => false,
@@ -203,4 +203,3 @@ class ApiContractTest extends TestCase
         $this->assertArrayNotHasKey('trace', $responseData);
     }
 }
-

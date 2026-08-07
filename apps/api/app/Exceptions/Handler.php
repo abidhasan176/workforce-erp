@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
             ], 401);
         }
 
-        if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException || 
+        if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException ||
             $exception instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {
             return response()->json([
                 'success' => false,
@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler
             ], 403);
         }
 
-        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException || 
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException ||
             $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             return response()->json([
                 'success' => false,
@@ -106,4 +106,3 @@ class Handler extends ExceptionHandler
         return response()->json($response, 500);
     }
 }
-

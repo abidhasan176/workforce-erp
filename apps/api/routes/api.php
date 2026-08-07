@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\UsersController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,17 +38,16 @@ if (app()->environment('testing', 'local')) {
         Route::get('/test-errors/{type}', function ($type) {
             switch ($type) {
                 case '401':
-                    throw new \Illuminate\Auth\AuthenticationException();
+                    throw new \Illuminate\Auth\AuthenticationException;
                 case '403':
-                    throw new \Illuminate\Auth\Access\AuthorizationException();
+                    throw new \Illuminate\Auth\Access\AuthorizationException;
                 case '409':
                     throw new \Symfony\Component\HttpKernel\Exception\ConflictHttpException('Conflict occurred.');
                 case '500':
                     throw new \Exception('Fatal database crash.');
             }
+
             return response()->json(['message' => 'Ok']);
         });
     });
 }
-
-
