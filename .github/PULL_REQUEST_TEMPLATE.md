@@ -1,22 +1,25 @@
 # Pull Request
 
+Target branch: `develop`
+
 ## Summary
 
-Describe the change and the user or system impact.
+<!-- Briefly describe what was implemented. -->
 
-## Testing
+## Details
 
-- [ ] `pnpm lint`
-- [ ] `pnpm typecheck`
-- [ ] Relevant app or package tests
+- Added:
+- Updated:
+- Fixed:
+- Optimized:
 
-## Screenshots
+## Related issue
 
-Include screenshots or recordings for UI changes when applicable.
+Closes #
+
 
 ## Checklist
 
-- [ ] I updated documentation if needed
-- [ ] I added or updated tests if needed
-- [ ] I considered environment variables, migrations, and deployment impact
-- [ ] I understand this repository is source-available for approved collaboration only and remains `UNLICENSED`
+- [ ] Tests and required checks pass.
+- [ ] Documentation is updated if needed.
+- [ ] No secrets or unrelated changes are included.
