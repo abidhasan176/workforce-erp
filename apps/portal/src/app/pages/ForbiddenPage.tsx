@@ -10,8 +10,9 @@ export default function ForbiddenPage() {
     try {
       const data = await apiClient.getHealth()
       setApiResult(JSON.stringify(data))
-    } catch (err: any) {
-      setApiResult(`Error: ${err.message}`)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      setApiResult(`Error: ${message}`)
     } finally {
       setLoading(false)
     }
