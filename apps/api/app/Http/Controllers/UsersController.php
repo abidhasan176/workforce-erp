@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UsersController extends Controller
 {
@@ -17,9 +18,33 @@ class UsersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->userService->getUsers();
+        // Mock a paginated response to demonstrate collection metadata contract
+        $page = (int) $request->input('page', 1);
+        $perPage = (int) $request->input('per_page', 5);
+        $total = 12;
+
+        $items = [];
+        for ($i = ($page - 1) * $perPage + 1; $i <= min($page * $perPage, $total); $i++) {
+            $items[] = [
+                'id' => $i,
+                'name' => 'Item '.$i,
+                'description' => 'Description for item '.$i,
+                'created_at' => now()->toIso8601String(),
+                'updated_at' => now()->toIso8601String(),
+            ];
+        }
+
+        $paginator = new LengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $page,
+            ['path' => $request->url()]
+        );
+
+        return $this->successResponse($paginator, 'Items retrieved successfully');
     }
 
     /**
@@ -27,15 +52,18 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        return response()->json([
-            'data' => [
-                'id' => $id,
-                'name' => 'Item '.$id,
-                'description' => 'Description for item '.$id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        if ($id == 999) {
+            // Mock a conflict/not-found scenario if required, or throw model not found
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Resource not found.');
+        }
+
+        return $this->successResponse([
+            'id' => (int) $id,
+            'name' => 'Item '.$id,
+            'description' => 'Description for item '.$id,
+            'created_at' => now()->toIso8601String(),
+            'updated_at' => now()->toIso8601String(),
+        ], 'Item retrieved successfully');
     }
 
     /**
@@ -43,21 +71,17 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $body = $request->json();
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
 
-        // Log to console/logs instead of response
-        logger()->info('POST /items - Request body:', ['body' => $body]);
-        logger()->info('POST /items - All request data:', $request->all());
-
-        return response()->json([
-            'message' => 'Item created successfully',
-            'data' => [
-                'id' => rand(100, 999),
-                'name' => $body->get('name'),
-                'description' => $request->input('description', 'Item description'),
-                'created_at' => now(),
-            ],
-        ], 201);
+        return $this->successResponse([
+            'id' => rand(100, 999),
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? 'Item description',
+            'created_at' => now()->toIso8601String(),
+        ], 'Item created successfully', 201);
     }
 
     /**
@@ -65,15 +89,17 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return response()->json([
-            'message' => 'Item updated successfully',
-            'data' => [
-                'id' => $id,
-                'name' => $request->input('name', 'Updated Item'),
-                'description' => $request->input('description', 'Updated description'),
-                'updated_at' => now(),
-            ],
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ]);
+
+        return $this->successResponse([
+            'id' => (int) $id,
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? 'Updated description',
+            'updated_at' => now()->toIso8601String(),
+        ], 'Item updated successfully');
     }
 
     /**
@@ -81,15 +107,17 @@ class UsersController extends Controller
      */
     public function patch(Request $request, $id)
     {
-        return response()->json([
-            'message' => 'Item partially updated successfully',
-            'data' => [
-                'id' => $id,
-                'name' => $request->input('name', 'Partially Updated Item'),
-                'description' => $request->input('description', 'Partially updated description'),
-                'updated_at' => now(),
-            ],
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|nullable|string',
         ]);
+
+        return $this->successResponse([
+            'id' => (int) $id,
+            'name' => $validated['name'] ?? 'Partially Updated Item',
+            'description' => $validated['description'] ?? 'Partially updated description',
+            'updated_at' => now()->toIso8601String(),
+        ], 'Item partially updated successfully');
     }
 
     /**
@@ -97,11 +125,9 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        return response()->json([
-            'message' => 'Item deleted successfully',
-            'data' => [
-                'id' => $id,
-            ],
-        ]);
+        return $this->successResponse([
+            'id' => (int) $id,
+        ], 'Item deleted successfully');
     }
 }
+
