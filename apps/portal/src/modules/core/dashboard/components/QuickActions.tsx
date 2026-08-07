@@ -2,7 +2,6 @@ import { Link } from "react-router-dom"
 import {
   UserPlus,
   CalendarPlus,
-  ClipboardList,
   FileSearch,
   Receipt,
   Building2,
@@ -35,12 +34,6 @@ const actions: QuickAction[] = [
     description: "Submit or review time-off",
     to: "/people/leave",
     icon: CalendarPlus,
-  },
-  {
-    label: "View Attendance",
-    description: "Check today's presence log",
-    to: "/people/attendance",
-    icon: ClipboardList,
   },
   {
     label: "Documents",
