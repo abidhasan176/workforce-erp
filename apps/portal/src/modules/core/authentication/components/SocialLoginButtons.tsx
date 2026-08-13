@@ -1,5 +1,6 @@
 import { cn } from "@workforce-erp/ui/lib/utils"
 import { Button } from "@workforce-erp/ui/components/button"
+import { apiClient } from "@/lib/api"
 
 /** Inline SVG for Google's "G" mark — no external dependency needed. */
 function GoogleIcon({ className }: { className?: string }) {
@@ -59,9 +60,18 @@ export function SocialLoginButtons({
   className,
   action = "Sign in",
 }: SocialLoginButtonsProps) {
-  function handleSocial(provider: "google" | "microsoft") {
-    // TODO: replace with real OAuth redirect
-    console.info(`[placeholder] ${provider} OAuth flow`)
+  async function handleSocial(provider: "google" | "microsoft") {
+    try {
+      const response = await apiClient.get<{
+        success: boolean
+        redirect_url: string
+      }>(`/api/v1/auth/sso/redirect/${provider}`)
+      if (response.success && response.redirect_url) {
+        window.location.href = response.redirect_url
+      }
+    } catch (err) {
+      console.error(`SSO redirect failed for ${provider}:`, err)
+    }
   }
 
   return (
