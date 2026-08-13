@@ -26,6 +26,10 @@ Route::get('/health', function () {
 Route::get('/v1/auth/sso/redirect/{provider}', [\App\Http\Controllers\Api\v1\SSOController::class, 'redirectToProvider']);
 Route::post('/v1/auth/sso/callback/{provider}', [\App\Http\Controllers\Api\v1\SSOController::class, 'handleProviderCallback']);
 
+// OTP Routes
+Route::post('/v1/auth/otp/request', [\App\Http\Controllers\Api\v1\OTPController::class, 'requestOtp']);
+Route::post('/v1/auth/otp/verify', [\App\Http\Controllers\Api\v1\OTPController::class, 'verifyOtp']);
+
 if (app()->environment('testing', 'local')) {
     Route::prefix('v1')->group(function () {
         // Endpoint to verify error exception mapping
