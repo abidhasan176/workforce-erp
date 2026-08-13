@@ -56,10 +56,12 @@ export function LoginForm({ className, onSuccess }: LoginFormProps) {
       } else {
         setError(response.message || "Invalid email or password.")
       }
-    } catch (err: any) {
-      setError(
-        err.message || "Authentication failed. Please check your credentials."
-      )
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Authentication failed. Please check your credentials."
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }

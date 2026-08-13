@@ -15,13 +15,14 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<AuthSession | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(() => {
+    return typeof window !== "undefined" && !!getStoredToken()
+  })
 
   useEffect(() => {
     const token = getStoredToken()
 
     if (!token) {
-      setIsLoading(false)
       return
     }
 
