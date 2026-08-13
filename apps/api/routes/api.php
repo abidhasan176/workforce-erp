@@ -30,6 +30,14 @@ Route::post('/v1/auth/sso/callback/{provider}', [\App\Http\Controllers\Api\v1\SS
 Route::post('/v1/auth/otp/request', [\App\Http\Controllers\Api\v1\OTPController::class, 'requestOtp']);
 Route::post('/v1/auth/otp/verify', [\App\Http\Controllers\Api\v1\OTPController::class, 'verifyOtp']);
 
+// Core Auth Routes
+Route::post('/v1/auth/login', [\App\Http\Controllers\Api\v1\AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/v1/auth/me', [\App\Http\Controllers\Api\v1\AuthController::class, 'me']);
+    Route::post('/v1/auth/logout', [\App\Http\Controllers\Api\v1\AuthController::class, 'logout']);
+});
+
 if (app()->environment('testing', 'local')) {
     Route::prefix('v1')->group(function () {
         // Endpoint to verify error exception mapping
