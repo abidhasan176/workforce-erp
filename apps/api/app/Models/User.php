@@ -33,4 +33,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class); // One user has many posts
     }
+
+    public function organizations()
+    {
+        return $this->belongsToMany(Organization::class, 'organization_members')
+            ->withPivot(['role', 'status'])
+            ->withTimestamps();
+    }
+
+    public function memberships()
+    {
+        return $this->hasMany(OrganizationMember::class);
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }
