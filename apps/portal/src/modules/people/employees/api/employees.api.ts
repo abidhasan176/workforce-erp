@@ -14,7 +14,9 @@ export const employeesApi = {
     page?: number
     per_page?: number
   }) {
-    return apiClient.get<ApiResponse<Employee[]>>("/api/v1/employees", { params })
+    return apiClient.get<ApiResponse<Employee[]>>("/api/v1/employees", {
+      params,
+    })
   },
 
   /**

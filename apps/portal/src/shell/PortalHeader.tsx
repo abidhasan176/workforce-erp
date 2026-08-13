@@ -46,7 +46,9 @@ export function PortalHeader({ section, title }: PortalHeaderProps) {
           </div>
 
           <Tooltip>
-            <TooltipTrigger render={<ThemeSwitcher className="text-muted-foreground" />} />
+            <TooltipTrigger
+              render={<ThemeSwitcher className="text-muted-foreground" />}
+            />
             <TooltipContent>Theme</TooltipContent>
           </Tooltip>
 

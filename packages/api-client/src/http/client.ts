@@ -27,14 +27,14 @@ export interface ApiClient {
  */
 export function buildQueryString(params?: Record<string, any>): string {
   if (!params) return ""
-  
+
   const searchParams = new URLSearchParams()
-  
+
   for (const [key, value] of Object.entries(params)) {
     if (value === undefined || value === null) {
       continue
     }
-    
+
     if (Array.isArray(value)) {
       for (const item of value) {
         if (item !== undefined && item !== null) {
@@ -47,7 +47,7 @@ export function buildQueryString(params?: Record<string, any>): string {
       searchParams.append(key, String(value))
     }
   }
-  
+
   const queryString = searchParams.toString()
   return queryString ? `?${queryString}` : ""
 }
@@ -95,14 +95,16 @@ export async function handleResponse<T>(response: Response): Promise<T> {
  */
 export function createApiClient(options: ApiClientOptions): ApiClient {
   const baseUrl = options.baseUrl.replace(/\/$/, "")
-  
+
   // Default to standard token storage key if no getter function is provided
-  const getToken = options.getToken || (() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("workforce-erp.auth.token")
-    }
-    return null
-  })
+  const getToken =
+    options.getToken ||
+    (() => {
+      if (typeof window !== "undefined") {
+        return localStorage.getItem("workforce-erp.auth.token")
+      }
+      return null
+    })
 
   async function request<T>(
     method: string,
@@ -121,7 +123,7 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
       : `${baseUrl}${cleanUrl}${queryString ? (cleanUrl.includes("?") ? `${queryString.replace("?", "&")}` : queryString) : ""}`
 
     const headers = new Headers(requestOptions?.headers)
-    
+
     if (!headers.has("Accept")) {
       headers.set("Accept", "application/json")
     }
