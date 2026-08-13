@@ -17,6 +17,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'sso_provider',
+        'sso_provider_id',
     ];
 
     /**

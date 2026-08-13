@@ -22,6 +22,10 @@ Route::get('/health', function () {
     ]);
 });
 
+// SSO Routes
+Route::get('/v1/auth/sso/redirect/{provider}', [\App\Http\Controllers\Api\v1\SSOController::class, 'redirectToProvider']);
+Route::post('/v1/auth/sso/callback/{provider}', [\App\Http\Controllers\Api\v1\SSOController::class, 'handleProviderCallback']);
+
 if (app()->environment('testing', 'local')) {
     Route::prefix('v1')->group(function () {
         // Endpoint to verify error exception mapping

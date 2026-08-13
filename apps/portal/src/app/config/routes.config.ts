@@ -16,6 +16,7 @@ import LoginPage from "@/modules/core/authentication/pages/LoginPage.tsx"
 import MfaChallengePage from "@/modules/core/authentication/pages/MfaChallengePage.tsx"
 import RegisterPage from "@/modules/core/authentication/pages/RegisterPage.tsx"
 import ResetPasswordPage from "@/modules/core/authentication/pages/ResetPasswordPage.tsx"
+import SsoCallbackPage from "@/modules/core/authentication/pages/SsoCallbackPage.tsx"
 import VerifyEmailPage from "@/modules/core/authentication/pages/VerifyEmailPage.tsx"
 import DashboardPage from "@/modules/core/dashboard/pages/DashboardPage.tsx"
 import ForbiddenPage from "@/app/pages/ForbiddenPage.tsx"
@@ -218,6 +219,16 @@ export const authRoutes: PortalRoute[] = [
     section: "Auth",
     icon: KeyRound,
     component: MfaChallengePage,
+    isAuthRoute: true,
+  },
+  {
+    key: "sso-callback",
+    title: "SSO Callback",
+    description: "Processing SSO authentication...",
+    path: "/auth/callback/:provider",
+    section: "Auth",
+    icon: KeyRound,
+    component: SsoCallbackPage,
     isAuthRoute: true,
   },
 ]
