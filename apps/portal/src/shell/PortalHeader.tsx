@@ -46,74 +46,76 @@ export function PortalHeader({ section, title }: PortalHeaderProps) {
           </div>
 
           <Tooltip>
-            <TooltipTrigger>
-              <ThemeSwitcher className="text-muted-foreground" />
-            </TooltipTrigger>
+            <TooltipTrigger render={<ThemeSwitcher className="text-muted-foreground" />} />
             <TooltipContent>Theme</TooltipContent>
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                aria-label="Search"
-                className="text-muted-foreground lg:hidden"
-              >
-                <Search />
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label="Search"
+                  className="text-muted-foreground lg:hidden"
+                >
+                  <Search />
+                </Button>
+              }
+            />
             <TooltipContent>Search</TooltipContent>
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger>
-              <div className="relative">
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label="Notifications"
-                  className="text-muted-foreground"
-                >
-                  <Bell />
-                </Button>
-                <Badge className="absolute -top-1 -right-1 h-4 min-w-4 px-1 text-[10px]">
-                  3
-                </Badge>
-              </div>
+            <TooltipTrigger render={<div className="relative" />}>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Notifications"
+                className="text-muted-foreground"
+              >
+                <Bell />
+              </Button>
+              <Badge className="absolute -top-1 -right-1 h-4 min-w-4 px-1 text-[10px]">
+                3
+              </Badge>
             </TooltipTrigger>
             <TooltipContent>Notifications</TooltipContent>
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                aria-label="Settings"
-                className="hidden text-muted-foreground sm:inline-flex"
-              >
-                <Settings />
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label="Settings"
+                  className="hidden text-muted-foreground sm:inline-flex"
+                >
+                  <Settings />
+                </Button>
+              }
+            />
             <TooltipContent>Settings</TooltipContent>
           </Tooltip>
 
           <Separator orientation="vertical" className="mx-1 h-5" />
 
           <Tooltip>
-            <TooltipTrigger>
-              <button
-                type="button"
-                aria-label="User menu"
-                className="rounded-full ring-2 ring-border transition-all hover:ring-primary"
-              >
-                <Avatar size="sm">
-                  <AvatarFallback className="bg-primary text-xs font-bold text-primary-foreground">
-                    U
-                  </AvatarFallback>
-                </Avatar>
-              </button>
+            <TooltipTrigger
+              render={
+                <button
+                  type="button"
+                  aria-label="User menu"
+                  className="rounded-full ring-2 ring-border transition-all hover:ring-primary"
+                />
+              }
+            >
+              <Avatar size="sm">
+                <AvatarFallback className="bg-primary text-xs font-bold text-primary-foreground">
+                  U
+                </AvatarFallback>
+              </Avatar>
             </TooltipTrigger>
             <TooltipContent>Profile</TooltipContent>
           </Tooltip>
