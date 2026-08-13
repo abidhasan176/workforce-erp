@@ -14,6 +14,18 @@ import { Breadcrumbs } from "@/shell/Breadcrumbs.tsx"
 import { CommandMenu } from "@/shell/CommandMenu.tsx"
 import { TenantSwitcher } from "@/shell/TenantSwitcher.tsx"
 import { ThemeSwitcher } from "@/shell/ThemeSwitcher.tsx"
+import { useAuth, clearStoredToken } from "@workforce-erp/auth-client"
+import { LogOut } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { apiClient } from "@/lib/api"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@workforce-erp/ui/components/dropdown-menu"
 
 type PortalHeaderProps = {
   section: string
@@ -21,6 +33,22 @@ type PortalHeaderProps = {
 }
 
 export function PortalHeader({ section, title }: PortalHeaderProps) {
+  const { session, signOut } = useAuth()
+  const navigate = useNavigate()
+  const user = session?.user
+
+  async function handleLogout() {
+    try {
+      await apiClient.post("/api/v1/auth/logout")
+    } catch (err) {
+      console.error("Logout request failed:", err)
+    } finally {
+      clearStoredToken()
+      signOut()
+      navigate("/auth/login")
+    }
+  }
+
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="flex min-h-16 items-center justify-between gap-3 px-4 md:px-6 lg:px-8">
@@ -103,24 +131,45 @@ export function PortalHeader({ section, title }: PortalHeaderProps) {
 
           <Separator orientation="vertical" className="mx-1 h-5" />
 
-          <Tooltip>
-            <TooltipTrigger
+          <DropdownMenu>
+            <DropdownMenuTrigger
               render={
                 <button
                   type="button"
+                  id="user-menu-trigger"
                   aria-label="User menu"
-                  className="rounded-full ring-2 ring-border transition-all hover:ring-primary"
+                  className="rounded-full ring-2 ring-border transition-all outline-none hover:ring-primary"
                 />
               }
             >
               <Avatar size="sm">
                 <AvatarFallback className="bg-primary text-xs font-bold text-primary-foreground">
-                  U
+                  {user?.name ? user.name[0].toUpperCase() : "U"}
                 </AvatarFallback>
               </Avatar>
-            </TooltipTrigger>
-            <TooltipContent>Profile</TooltipContent>
-          </Tooltip>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex flex-col gap-0.5">
+                  <p className="truncate text-sm font-semibold">
+                    {user?.name || "Portal User"}
+                  </p>
+                  <p className="truncate text-[10px] text-muted-foreground">
+                    {user?.email || "user@acme.com"}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                id="logout-button"
+                onClick={handleLogout}
+                className="cursor-pointer"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
