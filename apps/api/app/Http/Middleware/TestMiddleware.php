@@ -10,7 +10,7 @@ class TestMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->is('api/health') || $request->is('api/v1/auth/sso/*')) {
+        if ($request->is('api/health') || $request->is('api/v1/auth/sso/*') || $request->is('api/v1/auth/otp/*')) {
             return $next($request);
         }
 
