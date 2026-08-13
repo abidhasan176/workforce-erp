@@ -135,6 +135,9 @@ importers:
       '@workforce-erp/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
+      '@workforce-erp/auth-client':
+        specifier: workspace:*
+        version: link:../../packages/auth-client
       '@workforce-erp/ui':
         specifier: workspace:*
         version: link:../../packages/ui
