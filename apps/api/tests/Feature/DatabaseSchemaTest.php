@@ -7,7 +7,6 @@ use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Employee;
 use App\Models\Organization;
-use App\Models\OrganizationMember;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Timesheet;
