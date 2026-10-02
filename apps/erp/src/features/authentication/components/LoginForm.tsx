@@ -7,20 +7,15 @@ import { Button } from "@workforce-erp/ui/components/button";
 import { Input } from "@workforce-erp/ui/components/input";
 import { Label } from "@workforce-erp/ui/components/label";
 import { cn } from "@workforce-erp/ui/lib/utils";
-import {
-  authenticationApi,
-  toAuthSession,
-  type VerificationChallengePayload,
-} from "#features/authentication/api/authentication.api";
+import { authenticationApi, toAuthSession } from "#features/authentication/api/authentication.api";
 import { AUTH_PATHS } from "#features/authentication/navigation";
 
 export interface LoginFormProps {
   className?: string;
   onSuccess?: () => void;
-  onVerificationRequired?: (challenge: VerificationChallengePayload) => void;
 }
 
-export function LoginForm({ className, onSuccess, onVerificationRequired }: LoginFormProps) {
+export function LoginForm({ className, onSuccess }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -42,10 +37,6 @@ export function LoginForm({ className, onSuccess, onVerificationRequired }: Logi
     setIsLoading(true);
     try {
       const response = await authenticationApi.login(normalizedEmail, password);
-      if (response.status === "verification_required") {
-        onVerificationRequired?.(response.challenge);
-        return;
-      }
       signIn(toAuthSession(response));
       onSuccess?.();
     } catch (error) {
