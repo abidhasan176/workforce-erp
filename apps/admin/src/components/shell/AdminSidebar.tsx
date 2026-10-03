@@ -1,4 +1,12 @@
-import { Building2, LayoutDashboard, Settings, ShieldCheck, Users, Waypoints } from "lucide-react";
+import {
+  Building2,
+  LayoutDashboard,
+  MessageSquare,
+  Settings,
+  ShieldCheck,
+  Users,
+  Waypoints,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -18,11 +26,13 @@ import {
 import { Avatar, AvatarFallback } from "@workforce-erp/ui/components/avatar";
 import { useAuth } from "@workforce-erp/auth";
 import { ADMIN_PATHS } from "#routes/paths";
+import { useAdminNotifications } from "#features/notifications/hooks/use-admin-notifications";
 
 const items = [
   { label: "Dashboard", to: ADMIN_PATHS.dashboard, icon: LayoutDashboard },
   { label: "Tenants", to: ADMIN_PATHS.tenants, icon: Waypoints },
   { label: "Organizations", to: ADMIN_PATHS.organizations, icon: Building2 },
+  { label: "Inquiries", to: ADMIN_PATHS.inquiries, icon: MessageSquare, badge: true },
   { label: "Users", to: ADMIN_PATHS.users, icon: Users },
   { label: "Roles", to: ADMIN_PATHS.roles, icon: ShieldCheck },
   { label: "Settings", to: ADMIN_PATHS.settings, icon: Settings },
@@ -33,6 +43,7 @@ export function AdminSidebar() {
   const { isMobile, setOpenMobile } = useSidebar();
   const { session } = useAuth();
   const user = session?.user;
+  const { unreadCount } = useAdminNotifications(true);
 
   return (
     <Sidebar collapsible="icon" variant="sidebar">
@@ -61,6 +72,7 @@ export function AdminSidebar() {
               {items.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.to || pathname.startsWith(`${item.to}/`);
+                const showBadge = item.badge && unreadCount > 0;
                 return (
                   <SidebarMenuItem key={item.to}>
                     <SidebarMenuButton
@@ -68,9 +80,17 @@ export function AdminSidebar() {
                       isActive={isActive}
                       tooltip={item.label}
                       onClick={() => isMobile && setOpenMobile(false)}
+                      className="justify-between"
                     >
-                      <Icon className="size-4" />
-                      <span>{item.label}</span>
+                      <div className="flex items-center gap-2">
+                        <Icon className="size-4" />
+                        <span>{item.label}</span>
+                      </div>
+                      {showBadge && (
+                        <span className="rounded-full bg-rose-500 px-1.5 py-0.2 text-[10px] font-bold text-white group-data-[collapsible=icon]:hidden">
+                          {unreadCount > 99 ? "99+" : unreadCount}
+                        </span>
+                      )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
