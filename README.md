@@ -21,7 +21,7 @@ Nx discovers the JavaScript/TypeScript projects from `pnpm-workspace.yaml`. The 
 
 - Node.js 22+
 - pnpm 11.22.0 through Corepack
-- PHP 8.3+ for the Laravel 13 API (CI uses PHP 8.5)
+- PHP 8.4+ for the Laravel 13 API (CI uses PHP 8.5)
 - Composer 2
 - Docker Desktop with Docker Compose (optional local container stack)
 
@@ -43,9 +43,9 @@ php apps/api/artisan key:generate
 
 ## Authentication & security
 
-The customer ERP uses first-party Sanctum cookie sessions with CSRF protection; browser authentication tokens are not stored in `localStorage`. Public browser routes use canonical paths such as `/sign-in`, `/sign-up`, `/verify-sign-in`, `/accept-invitation/:token`, and `/onboarding/*`; `/api/v1/auth/*` remains the internal API namespace.
+The customer ERP uses first-party Sanctum cookie sessions with CSRF protection; browser authentication tokens are not stored in `localStorage`. Public browser routes use canonical paths such as `/sign-in`, `/sign-up`, `/verify-email`, `/accept-invitation/:token`, and `/onboarding/*`; `/api/v1/auth/*` remains the internal API namespace.
 
-Verification methods are limited to **Authenticator App (TOTP)**, **Email Code**, and **SMS Code**. Privileged accounts require verification before the final authenticated session is established. Tenant business requests require an explicit `X-Tenant-Key` and the backend verifies active membership, roles, permissions, data scope, policies, SoD/business rules, and step-up requirements. Platform administration has separate platform roles and `/api/v1/platform/*` authorization.
+Registration requires email verification. Password, Google, and Microsoft sign-in establish a session directly; Authenticator App (TOTP), Email Code, and SMS Code remain available for step-up verification of sensitive actions. Tenant business requests require an explicit `X-Tenant-Key` and the backend verifies active membership, roles, permissions, data scope, policies, SoD/business rules, and step-up requirements. Platform administration has separate platform roles and `/api/v1/platform/*` authorization.
 
 ## Development
 
@@ -78,7 +78,7 @@ Default local URLs:
 
 ## Optional Docker Desktop stack
 
-The local Docker Compose stack uses Caddy, PHP/Apache, MySQL, Redis, and Mailpit. It serves HTTP from one `localhost` origin and is for local development only; production deployment and TLS will be configured later.
+The local Docker Compose stack uses Nginx, PHP/Apache, MySQL, and Redis. It sends email through Gmail SMTP and serves HTTP from one `localhost` origin; production deployment and TLS will be configured later.
 
 ```bash
 cp .env.docker.example .env.docker
@@ -97,7 +97,7 @@ pnpm docker:build
 pnpm docker:down
 ```
 
-Open Web at `http://localhost:8080`, ERP at `http://localhost:8080/erp/`, Admin at `http://localhost:8080/admin/`, API at `http://localhost:8080/api`, and Mailpit at `http://localhost:8025`.
+Open Web at `http://localhost:8080`, ERP at `http://localhost:8080/erp/`, Admin at `http://localhost:8080/admin/`, and API at `http://localhost:8080/api`.
 
 ## Nx commands
 
