@@ -6,6 +6,7 @@ import { Input } from "@workforce-erp/ui/components/input";
 import { Label } from "@workforce-erp/ui/components/label";
 import { Textarea } from "@workforce-erp/ui/components/textarea";
 import { cn } from "@workforce-erp/ui/lib/utils";
+import { submitContactInquiry } from "../api/contact.api";
 
 /* ─── Hero ─── */
 export function ContactHeroSection() {
@@ -36,15 +37,43 @@ export function ContactHeroSection() {
 export function ContactFormSection() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    company: "",
+    message: "",
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      await submitContactInquiry({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        company: formData.company,
+        message: formData.message,
+      });
       setSuccess(true);
-    }, 1500);
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        company: "",
+        message: "",
+      });
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to send your message. Please try again.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -98,33 +127,69 @@ export function ContactFormSection() {
                 <div className="flex size-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
                   <MessageSquare className="size-8" />
                 </div>
-                <h3 className="mt-4 text-xl font-bold text-foreground">Form Submitted!</h3>
+                <h3 className="mt-4 text-xl font-bold text-foreground">
+                  Inquiry Sent Successfully!
+                </h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Thank you for reaching out. A member of our team will get back to you shortly.
+                  Thank you for reaching out. A platform administrator has received your
+                  notification and will get back to you shortly.
                 </p>
                 <Button className="mt-6" variant="outline" onClick={() => setSuccess(false)}>
-                  Submit Another Form
+                  Send Another Inquiry
                 </Button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-xs font-medium text-destructive">
+                    {error}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" required placeholder="Jane" />
+                    <Input
+                      id="firstName"
+                      required
+                      placeholder="Jane"
+                      value={formData.firstName}
+                      onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, firstName: e.target.value }))
+                      }
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" required placeholder="Doe" />
+                    <Input
+                      id="lastName"
+                      required
+                      placeholder="Doe"
+                      value={formData.lastName}
+                      onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, lastName: e.target.value }))
+                      }
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Work Email</Label>
-                  <Input id="email" type="email" required placeholder="jane@company.com" />
+                  <Input
+                    id="email"
+                    type="email"
+                    required
+                    placeholder="jane@company.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="company">Company Name</Label>
-                  <Input id="company" required placeholder="Acme Corp" />
+                  <Input
+                    id="company"
+                    placeholder="Acme Corp"
+                    value={formData.company}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, company: e.target.value }))}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
@@ -133,10 +198,12 @@ export function ContactFormSection() {
                     required
                     placeholder="How can we help you?"
                     className="min-h-[120px]"
+                    value={formData.message}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Submitting..." : "Submit"}
+                  {loading ? "Submitting Inquiry..." : "Submit Inquiry"}
                 </Button>
               </form>
             )}
